@@ -6,15 +6,20 @@ on:
   push:
     branches: [ "main" ]
     # Publish semver tags as releases.
-    tags: ["chmuri/ubuntu-molecule:22.04"]
+    tags: ["chmuri/ubuntu-molecule:${{ steps.extract_branch.outputs.branch }}"]
   pull_request:
     branches: [ "main" ]
 
 jobs:
+
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
       - name: Check out the repo
         uses: actions/checkout@v3
       
@@ -31,4 +36,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: chmuri/molecule:22.04
+          tags: chmuri/molecule:${{ steps.extract_branch.outputs.branch }}
