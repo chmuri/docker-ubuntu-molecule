@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-
+ 
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install: dependencies, clean: apt cache, remove dir: cache, man, doc, change mod time of cache dir.
